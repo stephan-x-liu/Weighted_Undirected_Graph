@@ -53,7 +53,16 @@ public class WUGraph {
    *
    * Running time:  O(|V|).
    */
-  public Object[] getVertices();
+  public Object[] getVertices(){
+    DList<Entry<Object,DList<VertexPair>>> entries = vertices.entries();
+    Object[] getverts = new Object[entries.length()];
+    int count = 0;
+    for(Entry k: entries){
+      getverts[count] = k.key();
+      count++; 
+    }
+    return getverts;
+  }
 
   /**
    * addVertex() adds a vertex (with no incident edges) to the graph.
@@ -62,7 +71,9 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public void addVertex(Object vertex);
+  public void addVertex(Object vertex){
+    vertices.insert(vertex,new DList<VertexPair>());
+  }
 
   /**
    * removeVertex() removes a vertex from the graph.  All edges incident on the
@@ -71,7 +82,21 @@ public class WUGraph {
    *
    * Running time:  O(d), where d is the degree of "vertex".
    */
-  public void removeVertex(Object vertex);
+  public void removeVertex(Object vertex){
+    Entry<Object,DList<VertexPair>> vert = vertices.remove(vertex);
+    if(vert!=null){
+      DList<VertexPair> connected = vert.value();
+      for(VertexPair v: connected){
+        edges.remove(v);
+        if(v.object1.equals(vertex)&&!v.object2.equals(vertex)){
+          vertices.find(v.object2).value().remove(v);
+        }
+        else if(v.object2.equals(vertex)&&!v.object1.equals(vertex)){
+          vertices.find(v.object1).value().remove(v);
+        }
+      }
+    }
+  }
 
   /**
    * isVertex() returns true if the parameter "vertex" represents a vertex of
@@ -79,7 +104,9 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public boolean isVertex(Object vertex);
+  public boolean isVertex(Object vertex){
+    return vertices.find(vertex)!=null;
+  }
 
   /**
    * degree() returns the degree of a vertex.  Self-edges add only one to the
@@ -88,7 +115,11 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public int degree(Object vertex);
+  public int degree(Object vertex){
+    if(vertices.find(vertex)!=null)
+      return vertices.find(vertex).value().length();
+    return 0;
+  }
 
   /**
    * getNeighbors() returns a new Neighbors object referencing two arrays.  The
@@ -108,7 +139,9 @@ public class WUGraph {
    *
    * Running time:  O(d), where d is the degree of "vertex".
    */
-  public Neighbors getNeighbors(Object vertex);
+  public Neighbors getNeighbors(Object vertex){
+    return null;
+  }
 
   /**
    * addEdge() adds an edge (u, v) to the graph.  If either of the parameters
@@ -119,7 +152,20 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public void addEdge(Object u, Object v, int weight);
+  public void addEdge(Object u, Object v, int weight){
+    if(vertices.find(u)!=null && vertices.find(v)!=null){
+      VertexPair temp = new VertexPair(u,v);
+      if(edges.find(temp)!=null){
+        edges.find(temp).setValue(weight);
+      }
+      else{
+        edges.insert(temp,weight);
+        vertices.find(u).value().insertFront(temp);
+        if(!u.equals(v))
+          vertices.find(v).value().insertFront(temp);
+      }
+    }
+  }
 
   /**
    * removeEdge() removes an edge (u, v) from the graph.  If either of the
@@ -129,7 +175,15 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public void removeEdge(Object u, Object v);
+  public void removeEdge(Object u, Object v){
+    VertexPair temp = new VertexPair(u,v);
+    if(vertices.find(u)!=null && vertices.find(v)!=null&&edges.find(temp)!=null){
+      edges.remove(temp);
+      vertices.find(u).value().remove(temp);
+      if(!u.equals(v))
+        vertices.find(v).value().remove(temp);
+    }
+  }
 
   /**
    * isEdge() returns true if (u, v) is an edge of the graph.  Returns false
@@ -138,8 +192,12 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public boolean isEdge(Object u, Object v);
-
+  public boolean isEdge(Object u, Object v){
+    if(vertices.find(u)!=null && vertices.find(v)!=null && edges.find(new VertexPair(u,v))!=null){
+      return true;
+    }
+    return false;
+  }
   /**
    * weight() returns the weight of (u, v).  Returns zero if (u, v) is not
    * an edge (including the case where either of the parameters u and v does
@@ -154,6 +212,13 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public int weight(Object u, Object v);
+  public int weight(Object u, Object v){
+    if(vertices.find(u)!=null && vertices.find(v)!=null){
+      Entry<VertexPair,Integer> temp = edges.find(new VertexPair(u,v));
+      if (temp!= null)
+        return temp.value();
+    }
+    return 0;
+  }
 
 }

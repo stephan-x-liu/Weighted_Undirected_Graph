@@ -131,6 +131,10 @@ public class HashTable<T,V> {
     return current;
   }
 
+  public DList<Entry<T,V>> entries(){
+    return entries;
+  }
+
   public void resize(){
     try{
       HashTable<T,V> larger = new HashTable<T,V>(next_prime(size*2));
@@ -256,6 +260,7 @@ public class HashTable<T,V> {
     test.insert("test10",10);
     System.out.println(test);
     System.out.println(test.size());
+    System.out.println(test.entries());
     System.out.println(test.find("test"));
     System.out.println(test.find("test1"));
     System.out.println(test.find("test2"));
@@ -278,6 +283,7 @@ public class HashTable<T,V> {
     System.out.println(test.remove("test8"));
     System.out.println(test.remove("test9"));
     System.out.println(test.remove("test10"));
+    System.out.println(test.entries());
     System.out.println(test);
   }
 }
