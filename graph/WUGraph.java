@@ -10,7 +10,7 @@ import dict.*;
 
 public class WUGraph {
 
-  HashTable<Object,DList<VertexPair>> vertices;
+  HashTable<Object,HashTable<Object,VertexPair>> vertices;
   HashTable<VertexPair,Integer> edges;
 
   /**
@@ -19,7 +19,7 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public WUGraph(){
-    vertices = new HashTable<Object,DList<VertexPair>>(50);
+    vertices = new HashTable<Object,HashTable<Object,VertexPair>>(50);
     edges = new HashTable<VertexPair,Integer>(50);
   }
 
@@ -54,7 +54,7 @@ public class WUGraph {
    * Running time:  O(|V|).
    */
   public Object[] getVertices(){
-    DList<Entry<Object,DList<VertexPair>>> entries = vertices.entries();
+    DList<Entry<Object,HashTable<Object,VertexPair>>> entries = vertices.entries();
     Object[] getverts = new Object[entries.length()];
     int count = 0;
     for(Entry k: entries){
@@ -73,7 +73,7 @@ public class WUGraph {
    */
   public void addVertex(Object vertex){
     if(vertices.find(vertex)==null)
-      vertices.insert(vertex,new DList<VertexPair>());
+      vertices.insert(vertex,new HashTable<Object,VertexPair>(vertexCount()+10));
   }
 
   /**
@@ -84,17 +84,13 @@ public class WUGraph {
    * Running time:  O(d), where d is the degree of "vertex".
    */
   public void removeVertex(Object vertex){
-    Entry<Object,DList<VertexPair>> vert = vertices.remove(vertex);
+    Entry<Object,HashTable<Object,VertexPair>> vert = vertices.remove(vertex);
     if(vert!=null){
-      DList<VertexPair> connected = vert.value();
-      for(VertexPair v: connected){
-        edges.remove(v);
-        if(v.object1.equals(vertex)&&!v.object2.equals(vertex)){
-          vertices.find(v.object2).value().remove(v);
-        }
-        else if(v.object2.equals(vertex)&&!v.object1.equals(vertex)){
-          vertices.find(v.object1).value().remove(v);
-        }
+      DList<Entry<Object,VertexPair>> connected = vert.value().entries();
+      for(Entry<Object,VertexPair> v: connected){
+        edges.remove(v.value());
+        if(vertices.find(v.key())!=null)
+          vertices.find(v.key()).value().remove(vertex);
       }
     }
   }
@@ -118,7 +114,7 @@ public class WUGraph {
    */
   public int degree(Object vertex){
     if(vertices.find(vertex)!=null)
-      return vertices.find(vertex).value().length();
+      return vertices.find(vertex).value().size();
     return 0;
   }
 
@@ -141,20 +137,16 @@ public class WUGraph {
    * Running time:  O(d), where d is the degree of "vertex".
    */
   public Neighbors getNeighbors(Object vertex){
-    if(vertices.find(vertex)==null || vertices.find(vertex).value().length()==0){
+    if(vertices.find(vertex)==null || vertices.find(vertex).value().size()==0){
       return null;
     }
-    DList<VertexPair> n = vertices.find(vertex).value();
-    Neighbors all = new Neighbors(n.length());
+    HashTable<Object,VertexPair> n = vertices.find(vertex).value();
+    DList<Entry<Object,VertexPair>> n_entries = n.entries();
+    Neighbors all = new Neighbors(n.size());
     int count = 0;
-    for(VertexPair k : n){
-      all.weightList[count] = edges.find(k).value();
-      if(k.object1.equals(vertex)){
-        all.neighborList[count] = k.object2;
-      }
-      else{
-        all.neighborList[count] = k.object1;
-      }
+    for(Entry<Object,VertexPair> k : n_entries){
+      all.weightList[count] = edges.find(k.value()).value();
+      all.neighborList[count] = k.key();
       count++;
     }
     return all;
@@ -177,9 +169,9 @@ public class WUGraph {
       }
       else{
         edges.insert(temp,weight);
-        vertices.find(u).value().insertFront(temp);
+        vertices.find(u).value().insert(v,temp);
         if(!u.equals(v))
-          vertices.find(v).value().insertFront(temp);
+          vertices.find(v).value().insert(u,temp);
       }
     }
   }
@@ -196,9 +188,9 @@ public class WUGraph {
     VertexPair temp = new VertexPair(u,v);
     if(vertices.find(u)!=null && vertices.find(v)!=null&&edges.find(temp)!=null){
       edges.remove(temp);
-      vertices.find(u).value().remove(temp);
+      vertices.find(u).value().remove(v);
       if(!u.equals(v))
-        vertices.find(v).value().remove(temp);
+        vertices.find(v).value().remove(u);
     }
   }
 

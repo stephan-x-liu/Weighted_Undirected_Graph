@@ -51,7 +51,12 @@ public class HashTable<T,V> {
   }
 
   static int mod(int num, int m){
-    int temp = num%m;
+    int temp;
+    if(m==0){
+      temp = num;
+    }
+    else
+      temp = num%(m);
     if(temp < 0){
       return m + temp;
     }
