@@ -14,6 +14,10 @@ public class Entry<T,V> {
     return value;
   }
 
+  public void setValue(V obj){
+    value = obj;
+  }
+
   public String toString(){
   	return key.toString()+":"+value.toString();
   }
