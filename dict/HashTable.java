@@ -6,9 +6,10 @@ public class HashTable<T,V> {
 
 
   protected int prime;
-  protected DList<Entry>[] buckets;
+  protected DList<DListNode<Entry<T,V>>>[] buckets;
   protected int size;
   protected int large_prime;
+  protected DList<Entry<T,V>> entries;
 
 
 
@@ -17,6 +18,7 @@ public class HashTable<T,V> {
     large_prime = 32452843;
     size = 0;
     buckets = new DList[prime];
+    entries = new DList<Entry<T,V>>();
   }
 
   /** 
@@ -93,7 +95,7 @@ public class HashTable<T,V> {
     return size == 0;
   }
 
-  public DList[] entries(){
+  public DList<DListNode<Entry<T,V>>>[] buckets(){
     return buckets;
   }
   /**
@@ -110,16 +112,18 @@ public class HashTable<T,V> {
    **/
   
 
-  public Entry insert(T key, V value) {
+  public Entry<T,V> insert(T key, V value) {
     // Replace the following line with your solution.
     Entry<T,V> current = new Entry<T,V>();
     current.key = key;
     current.value = value;
     int hash = compFunction(key.hashCode());
+    entries.insertFront(current);
+    DListNode<Entry<T,V>> node = entries.front();
     if(buckets[hash]==null){
-      buckets[hash] = new DList<Entry>();
+      buckets[hash] = new DList<DListNode<Entry<T,V>>>();
     }
-    buckets[hash].insertFront(current);
+    buckets[hash].insertFront(node);
     size++;
     if(this.loadFactor()>0.9){
       this.resize();
@@ -128,15 +132,19 @@ public class HashTable<T,V> {
   }
 
   public void resize(){
-    HashTable<T,V> larger = new HashTable<T,V>(next_prime(size*2));
-    for(DList<Entry> k: buckets){
-      for(Entry<T,V> j: k){
-        larger.insert(j.key(),j.value);
+    try{
+      HashTable<T,V> larger = new HashTable<T,V>(next_prime(size*2));
+      for(DList<DListNode<Entry<T,V>>> k: buckets){
+        for(DListNode<Entry<T,V>> j: k){
+          larger.insert(j.item().key(),j.item().value());
+        }
       }
+      buckets = larger.buckets();
+      prime = buckets.length;
     }
-    buckets = larger.entries();
-    prime = buckets.length;
-
+    catch(InvalidNodeException m){
+      return;
+    }
   }
 
   /** 
@@ -154,11 +162,11 @@ public class HashTable<T,V> {
   public Entry<T,V> find(T key) {
     try{
       int hash = compFunction(key.hashCode());
-      DListNode<Entry> curr = buckets[hash].front();
-      while(curr!=null && curr.item().key().equals(key)==false){
+      DListNode<DListNode<Entry<T,V>>> curr = buckets[hash].front();
+      while(curr!=null && curr.item().item().key().equals(key)==false){
         curr = curr.next();
       }
-      return curr.item();
+      return curr.item().item();
     }
     catch(NullPointerException e){
       return null;
@@ -184,11 +192,12 @@ public class HashTable<T,V> {
   public Entry<T,V> remove(T key) {
     try{
       int hash = compFunction(key.hashCode());
-      DListNode<Entry> curr = buckets[hash].front();
-      while(curr!=null && curr.item().key().equals(key)==false){
+      DListNode<DListNode<Entry<T,V>>> curr = buckets[hash].front();
+      while(curr!=null && curr.item().item().key().equals(key)==false){
         curr = curr.next();
       }
-      Entry temp = curr.item();
+      Entry<T,V> temp = curr.item().item();
+      curr.item().remove();
       curr.remove();
       size--;
       return temp;
@@ -213,17 +222,20 @@ public class HashTable<T,V> {
 
   public String toString(){
     String ret = "{  ";
-
-    for(int i = 0; i < buckets.length; i++){
-      if(buckets[i]!=null){
-        for(Entry<T,V> curr : buckets[i]){
-          ret += curr.key().toString() + ":" + curr.value().toString() + "  ";
+    try{
+      for(int i = 0; i < buckets.length; i++){
+        if(buckets[i]!=null){
+          for(DListNode<Entry<T,V>> curr : buckets[i]){
+            ret += curr.item().key().toString() + ":" + curr.item().value().toString() + "  ";
+          }
         }
       }
+      ret += "  }";
+      return ret;
     }
-    ret += "  }";
-    return ret;
-
+    catch(InvalidNodeException m){
+      return "ERROR";
+    }
 
   }
 

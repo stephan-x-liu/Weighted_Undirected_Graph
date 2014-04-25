@@ -1,7 +1,8 @@
 /* WUGraph.java */
 
 package graph;
-
+import list.*;
+import dict.*;
 /**
  * The WUGraph class represents a weighted, undirected graph.  Self-edges are
  * permitted.
@@ -9,26 +10,36 @@ package graph;
 
 public class WUGraph {
 
+  HashTable<Object,DList<VertexPair>> vertices;
+  HashTable<VertexPair,Integer> edges;
+
   /**
    * WUGraph() constructs a graph having no vertices or edges.
    *
    * Running time:  O(1).
    */
-  public WUGraph();
+  public WUGraph(){
+    vertices = new HashTable<Object,DList<VertexPair>>(50);
+    edges = new HashTable<VertexPair,Integer>(50);
+  }
 
   /**
    * vertexCount() returns the number of vertices in the graph.
    *
    * Running time:  O(1).
    */
-  public int vertexCount();
+  public int vertexCount(){
+    return vertices.size();
+  }
 
   /**
    * edgeCount() returns the total number of edges in the graph.
    *
    * Running time:  O(1).
    */
-  public int edgeCount();
+  public int edgeCount(){
+    return edges.size();
+  }
 
   /**
    * getVertices() returns an array containing all the objects that serve
