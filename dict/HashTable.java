@@ -210,7 +210,6 @@ public class HashTable<T,V> {
       return null;
     }
     catch(InvalidNodeException m){
-      System.out.println(m);
       return null;
     }
 

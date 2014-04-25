@@ -72,7 +72,8 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public void addVertex(Object vertex){
-    vertices.insert(vertex,new DList<VertexPair>());
+    if(vertices.find(vertex)==null)
+      vertices.insert(vertex,new DList<VertexPair>());
   }
 
   /**
@@ -140,7 +141,23 @@ public class WUGraph {
    * Running time:  O(d), where d is the degree of "vertex".
    */
   public Neighbors getNeighbors(Object vertex){
-    return null;
+    if(vertices.find(vertex)==null || vertices.find(vertex).value().length()==0){
+      return null;
+    }
+    DList<VertexPair> n = vertices.find(vertex).value();
+    Neighbors all = new Neighbors(n.length());
+    int count = 0;
+    for(VertexPair k : n){
+      all.weightList[count] = edges.find(k).value();
+      if(k.object1.equals(vertex)){
+        all.neighborList[count] = k.object2;
+      }
+      else{
+        all.neighborList[count] = k.object1;
+      }
+      count++;
+    }
+    return all;
   }
 
   /**
