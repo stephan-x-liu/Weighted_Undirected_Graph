@@ -4,9 +4,7 @@ import list.*;
 
 public class HashTable<T,V> {
 
-  /**
-   *  Place any data fields here.
-   **/
+
   protected int prime;
   protected DList<Entry>[] buckets;
   protected int size;
@@ -82,7 +80,6 @@ public class HashTable<T,V> {
    **/
 
   public int size() {
-    // Replace the following line with your solution.
     return size;
   }
 
@@ -93,10 +90,12 @@ public class HashTable<T,V> {
    **/
 
   public boolean isEmpty() {
-    // Replace the following line with your solution.
     return size == 0;
   }
 
+  public DList[] entries(){
+    return buckets;
+  }
   /**
    *  Create a new Entry object referencing the input key and associated value,
    *  and insert the entry into the dictionary.  Return a reference to the new
@@ -109,9 +108,7 @@ public class HashTable<T,V> {
    *  @param value an arbitrary object.
    *  @return an entry containing the key and value.
    **/
-  public DList[] entries(){
-    return buckets;
-  }
+  
 
   public Entry insert(T key, V value) {
     // Replace the following line with your solution.
@@ -191,14 +188,16 @@ public class HashTable<T,V> {
       while(curr!=null && curr.item().key().equals(key)==false){
         curr = curr.next();
       }
+      Entry temp = curr.item();
       curr.remove();
       size--;
-      return curr.item();
+      return temp;
     }
     catch(NullPointerException e){
       return null;
     }
     catch(InvalidNodeException m){
+      System.out.println(m);
       return null;
     }
 
@@ -214,21 +213,59 @@ public class HashTable<T,V> {
 
   public String toString(){
     String ret = "{  ";
-    try{
-      for(int i = 0; i < buckets.length; i++){
-        if(buckets[i]!=null){
-          DListNode<Entry> curr = buckets[i].front();
-          while(curr!=null){
-            ret += curr.item().key().toString() + ":" + curr.item().value().toString() + "  ";
-            curr = curr.next();
-          }
+
+    for(int i = 0; i < buckets.length; i++){
+      if(buckets[i]!=null){
+        for(Entry<T,V> curr : buckets[i]){
+          ret += curr.key().toString() + ":" + curr.value().toString() + "  ";
         }
       }
-      ret += "  }";
-      return ret;
     }
-    catch(InvalidNodeException m){
-      return null;
-    }
+    ret += "  }";
+    return ret;
+
+
+  }
+
+  public static void main(String[] args){
+    HashTable<String,Integer> test = new HashTable<String,Integer>(100);
+    System.out.println(test.size());
+    System.out.println(test.isEmpty());
+    test.insert("test",0);
+    test.insert("test1",1);
+    test.insert("test2",2);
+    test.insert("test3",3);
+    test.insert("test4",4);
+    test.insert("test5",5);
+    test.insert("test6",6);
+    test.insert("test7",7);
+    test.insert("test8",8);
+    test.insert("test9",9);
+    test.insert("test10",10);
+    System.out.println(test);
+    System.out.println(test.size());
+    System.out.println(test.find("test"));
+    System.out.println(test.find("test1"));
+    System.out.println(test.find("test2"));
+    System.out.println(test.find("test3"));
+    System.out.println(test.find("test4"));
+    System.out.println(test.find("test5"));
+    System.out.println(test.find("test6"));
+    System.out.println(test.find("test7"));
+    System.out.println(test.find("test8"));
+    System.out.println(test.find("test9"));
+    System.out.println(test.find("test10"));
+    System.out.println(test.remove("test"));
+    System.out.println(test.remove("test1"));
+    System.out.println(test.remove("test2"));
+    System.out.println(test.remove("test3"));
+    System.out.println(test.remove("test4"));
+    System.out.println(test.remove("test5"));
+    System.out.println(test.remove("test6"));
+    System.out.println(test.remove("test7"));
+    System.out.println(test.remove("test8"));
+    System.out.println(test.remove("test9"));
+    System.out.println(test.remove("test10"));
+    System.out.println(test);
   }
 }
