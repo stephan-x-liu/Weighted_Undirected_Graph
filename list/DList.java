@@ -260,6 +260,31 @@ public class DList<T> implements Iterable<T> {
 		}
 		return false;
 	}
+
+	public DListNode<T> find(T elem) {
+		try{
+			DListNode<T> curr = this.front();
+			while(curr!=null) {
+				if (curr.item().equals(elem)) {
+					return curr;
+				}
+				curr = curr.next();
+			}
+			return null;
+		}
+		catch(InvalidNodeException m){
+      		return null;
+    	}
+	}
+
+	public void remove(T elem) {
+		try{
+			find(elem).remove();
+		}
+		catch(InvalidNodeException m){
+      		return;
+    	}
+	}
 	
 	/**
 	 * @return the max value of the DList
@@ -267,8 +292,8 @@ public class DList<T> implements Iterable<T> {
 	public Integer max() {
 		if (head.next.item != null) {
 			int testval;
-		    testval = (Integer) head.next.item;
-		    DListNode cur = head.next;
+			testval = (Integer) head.next.item;
+			DListNode cur = head.next;
 			while (cur.next != null && cur != head) {
 				if ((Integer) cur.item > testval) {
 					testval = (Integer) cur.item;
