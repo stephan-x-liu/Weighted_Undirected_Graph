@@ -21,10 +21,6 @@ public class HashTable<T,V> {
     entries = new DList<Entry<T,V>>();
   }
 
-  /** 
-   *  Construct a new empty hash table with a default size.  Say, a prime in
-   *  the neighborhood of 100.
-   **/
 
   public int prime(){
     return prime;
