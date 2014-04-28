@@ -262,7 +262,7 @@ public class DList<T> implements Iterable<T> {
 	}
 
 	public DListNode<T> find(T elem) {
-		try{
+		try {
 			DListNode<T> curr = this.front();
 			while(curr!=null) {
 				if (curr.item().equals(elem)) {
@@ -271,39 +271,19 @@ public class DList<T> implements Iterable<T> {
 				curr = curr.next();
 			}
 			return null;
+		} catch (InvalidNodeException m) {
+			return null;
 		}
-		catch(InvalidNodeException m){
-      		return null;
-    	}
 	}
 
 	public void remove(T elem) {
-		try{
+		try {
 			find(elem).remove();
+		} catch (InvalidNodeException m) {
+			return;
 		}
-		catch(InvalidNodeException m){
-      		return;
-    	}
 	}
 	
-	/**
-	 * @return the max value of the DList
-	 */
-	public Integer max() {
-		if (head.next.item != null) {
-			int testval;
-			testval = (Integer) head.next.item;
-			DListNode cur = head.next;
-			while (cur.next != null && cur != head) {
-				if ((Integer) cur.item > testval) {
-					testval = (Integer) cur.item;
-				}
-				cur = cur.next;
-			}
-			return testval;
-		}
-		return 0;
-	}
 	/**
 	 * Utility function to count the non-null elements in an iterable.
 	 * 
