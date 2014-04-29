@@ -1,4 +1,4 @@
-/* DListNode<T>.java */
+/* DListNode.java */
 
 package list;
 
@@ -118,13 +118,9 @@ public class DListNode<T> {
 		if (!isValidNode()) {
 			throw new InvalidNodeException("insertAfter() called on invalid node");
 		}
-		// if (next.isValidNode()) {
 		next.prev = new DListNode<T>(item, (DList<T>) myList, this, next);
 		next = next.prev;
 		myList.size++;
-		// } else {
-		// throw new InvalidNodeException("List is corrupted - previous node invalid.");
-		// }
 	}
 
 	/**
@@ -139,13 +135,9 @@ public class DListNode<T> {
 		if (!isValidNode()) {
 			throw new InvalidNodeException("insertBefore() called on invalid node");
 		}
-		// if (prev.isValidNode()) {
 		prev.next = new DListNode<T>(item, (DList<T>) myList, prev, this);
 		prev = prev.next;
 		myList.size++;
-		// } else {
-		// throw new InvalidNodeException("List is corrupted - previous node invalid.");
-		// }
 	}
 
 	/**
