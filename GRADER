@@ -1,0 +1,8 @@
+Stephan Liu, cs61b-wf
+Sebastian Merz, cs61b-
+Eldon Something, cs61b-
+
+Our project was based around 2 main data structures: a custom HashTable and a custom DList implementation. RemoveVertex() runs in O(d) time because the adjancency list is a hash table with the vertex as the key, and the value is another hash table where all the neighbors it is connected to are hashed. As such, finding the vertex to be removed within the vertices hash table (adjacency list) is constant time. The entry object is returned, with key as the vertex that just got removed, and a hashtable containing all its neighbors and their respective vertexPairs. There are d neighbors. We remove each of the VertexPair from the edge Hash table. Then we remove the removed vertex from the hash table in the adjacency list of each of the vertices it was paired with. As such, this takes O(2d) which is just O(d). 
+GetVertices runs in O(V) time because our HashTable implementation keeps track of a DList of all the entries within the hashTable, so we just get the entries in the vertices hashtable in constant time, and then iterate through that in V time to put it into an array.
+
+
