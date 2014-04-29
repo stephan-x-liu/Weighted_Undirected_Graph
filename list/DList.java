@@ -5,8 +5,8 @@ package list;
 import java.util.*;
 
 /**
- * A DList<T> is a mutable, generic, doubly-linked list ADT. Its implementation is
- * circularly-linked and employs a sentinel node at the head of the list.
+ * A DList<T> is a mutable, generic, doubly-linked list ADT. Its implementation
+ * is circularly-linked and employs a sentinel node at the head of the list.
  * 
  * @author Eldon Schoop
  **/
@@ -14,29 +14,24 @@ import java.util.*;
 public class DList<T> implements Iterable<T> {
 
 	/**
-	 * size is the number of items in the list.
-	 * head references the sentinel node.
-	 * Note that the sentinel node does not store an item, and is not included
-	 * in the count stored by the "size" field.
+	 * size is the number of items in the list. head references the sentinel
+	 * node. Note that the sentinel node does not store an item, and is not
+	 * included in the count stored by the "size" field.
 	 **/
 
 	protected int size;
 	protected DListNode<T> head;
 
 	/*
-	 * DList<T> invariants:
-	 * 1) head != null.
-	 * 2) For every DListNode<T> x in a DList<T>, x.next != null.
-	 * 3) For every DListNode<T> x in a DList<T>, x.prev != null.
-	 * 4) For every DListNode<T> x in a DList<T>, if x.next == y, then y.prev == x.
-	 * 5) For every DListNode<T> x in a DList<T>, if x.prev == y, then y.next == x.
-	 * 6) For every DList<T> l, l.head.myList = null. (Note that l.head is the
-	 * sentinel.)
-	 * 7) For every DListNode<T> x in a DList<T> l EXCEPT l.head (the sentinel),
-	 * x.myList = l.
-	 * 8) size is the number of DListNodes, NOT COUNTING the sentinel,
-	 * that can be accessed from the sentinel (head) by a sequence of
-	 * "next" references.
+	 * DList<T> invariants: 1) head != null. 2) For every DListNode<T> x in a
+	 * DList<T>, x.next != null. 3) For every DListNode<T> x in a DList<T>,
+	 * x.prev != null. 4) For every DListNode<T> x in a DList<T>, if x.next ==
+	 * y, then y.prev == x. 5) For every DListNode<T> x in a DList<T>, if x.prev
+	 * == y, then y.next == x. 6) For every DList<T> l, l.head.myList = null.
+	 * (Note that l.head is the sentinel.) 7) For every DListNode<T> x in a
+	 * DList<T> l EXCEPT l.head (the sentinel), x.myList = l. 8) size is the
+	 * number of DListNodes, NOT COUNTING the sentinel, that can be accessed
+	 * from the sentinel (head) by a sequence of "next" references.
 	 */
 
 	/**
@@ -50,8 +45,8 @@ public class DList<T> implements Iterable<T> {
 	/**
 	 * isEmpty() returns true if this List is empty, false otherwise.
 	 * 
-	 * @return true if this List is empty, false otherwise.
-	 * Performance: runs in O(1) time.
+	 * @return true if this List is empty, false otherwise. Performance: runs in
+	 *         O(1) time.
 	 **/
 	public boolean isEmpty() {
 		return size == 0;
@@ -60,8 +55,7 @@ public class DList<T> implements Iterable<T> {
 	/**
 	 * length() returns the length of this List.
 	 * 
-	 * @return the length of this List.
-	 * Performance: runs in O(1) time.
+	 * @return the length of this List. Performance: runs in O(1) time.
 	 **/
 	public int length() {
 		return size;
@@ -74,12 +68,17 @@ public class DList<T> implements Iterable<T> {
 	 * wants to use a different kind of node.
 	 * 
 	 * @author Eldon Schoop
-	 * @param item the item to store in the node.
-	 * @param list the list that owns this node. (null for sentinels.)
-	 * @param prev the node previous to this node.
-	 * @param next the node following this node.
+	 * @param item
+	 *            the item to store in the node.
+	 * @param list
+	 *            the list that owns this node. (null for sentinels.)
+	 * @param prev
+	 *            the node previous to this node.
+	 * @param next
+	 *            the node following this node.
 	 **/
-	protected DListNode<T> newNode(T item, DList<T> list, DListNode<T> prev, DListNode<T> next) {
+	protected DListNode<T> newNode(T item, DList<T> list, DListNode<T> prev,
+			DListNode<T> next) {
 		return new DListNode<T>(item, list, prev, next);
 	}
 
@@ -96,11 +95,12 @@ public class DList<T> implements Iterable<T> {
 	}
 
 	/**
-	 * Transforms an iterable into a new DList, populated with every element in the
-	 * iterable.
+	 * Transforms an iterable into a new DList, populated with every element in
+	 * the iterable.
 	 * 
 	 * @author Eldon Schoop
-	 * @param inList an iterable to transform into a DList.
+	 * @param inList
+	 *            an iterable to transform into a DList.
 	 */
 	public DList(Iterable<T> inList) {
 		DListNode<T> newItem = newNode(null, null, null, null);
@@ -128,8 +128,8 @@ public class DList<T> implements Iterable<T> {
 	 * insertFront() inserts an item at the front of this DList<T>.
 	 * 
 	 * @author Eldon Schoop
-	 * @param item is the item to be inserted.
-	 * Performance: runs in O(1) time.
+	 * @param item
+	 *            is the item to be inserted. Performance: runs in O(1) time.
 	 **/
 	public void insertFront(T item) {
 		DListNode<T> newItem = newNode(item, this, head, head.next);
@@ -142,8 +142,8 @@ public class DList<T> implements Iterable<T> {
 	 * insertBack() inserts an item at the back of this DList<T>.
 	 * 
 	 * @author Eldon Schoop
-	 * @param item is the item to be inserted.
-	 * Performance: runs in O(1) time.
+	 * @param item
+	 *            is the item to be inserted. Performance: runs in O(1) time.
 	 **/
 	public void insertBack(T item) {
 		DListNode<T> newItem = newNode(item, this, head.prev, head);
@@ -162,10 +162,11 @@ public class DList<T> implements Iterable<T> {
 	}
 
 	/**
-	 * Appends an iterable, one item at a time, to "this" DList.
-	 * Runs in linear time.
+	 * Appends an iterable, one item at a time, to "this" DList. Runs in linear
+	 * time.
 	 * 
-	 * @param myIter the iterable to append to "this" DList.
+	 * @param myIter
+	 *            the iterable to append to "this" DList.
 	 */
 	public void append(Iterable<T> myIter) {
 		for (T elem : myIter) {
@@ -176,11 +177,11 @@ public class DList<T> implements Iterable<T> {
 	}
 
 	/**
-	 * Appends an iterable to "this" DList, one item at a time.
-	 * Appends items whether or not they are null. (Does not check).
-	 * Runs in linear time.
+	 * Appends an iterable to "this" DList, one item at a time. Appends items
+	 * whether or not they are null. (Does not check). Runs in linear time.
 	 * 
-	 * @param myIter the iterable to append to "this" DList.
+	 * @param myIter
+	 *            the iterable to append to "this" DList.
 	 */
 	public void appendWithNull(Iterable<T> myIter) {
 		for (T elem : myIter) {
@@ -189,30 +190,35 @@ public class DList<T> implements Iterable<T> {
 	}
 
 	/**
-	 * Appends a DList<T> to "this" DList<T>. Runs in constant time.
-	 * Type parameters need to be the same.
+	 * Appends a DList<T> to "this" DList<T>. Runs in constant time. Type
+	 * parameters need to be the same.
 	 * 
-	 * @param myList the DList<T> to append to "this" DList.
+	 * @param myList
+	 *            the DList<T> to append to "this" DList.
 	 */
 	public void appendDList(DList<T> myList) {
 		if (myList.length() == 0) {
 			return;
+		} else if (myList.length() == 1) {
+			insertBack(myList.frontItem());
+			return;
 		}
 		head.prev.next = myList.front();
 		myList.front().prev = head.prev;
-		head.prev = myList.back();
 		myList.back().next = head;
+		head.prev = myList.back();
 		myList.size += myList.length();
+
 	}
 
 	/**
-	 * front() returns the node at the front of this DList<T>. If the DList<T> is
-	 * empty, return an "invalid" node--a node with the property that any
+	 * front() returns the node at the front of this DList<T>. If the DList<T>
+	 * is empty, return an "invalid" node--a node with the property that any
 	 * attempt to use it will cause an exception. (The sentinel is "invalid".)
 	 * 
 	 * @author Eldon Schoop
-	 * @return a DListNode<T> at the front of this DList<T>.
-	 * Performance: runs in O(1) time.
+	 * @return a DListNode<T> at the front of this DList<T>. Performance: runs
+	 *         in O(1) time.
 	 */
 	public DListNode<T> front() {
 		return head.next;
@@ -220,11 +226,11 @@ public class DList<T> implements Iterable<T> {
 
 	/**
 	 * backItem() returns the item at the node at the front of "this" DList<T>.
-	 * Does NOT throw an InvalidNodeException, make sure to double check the items!
+	 * Does NOT throw an InvalidNodeException, make sure to double check the
+	 * items!
 	 * 
 	 * @return the item at the front of "this" DList<T>
-	 * @author Eldon Schoop
-	 * Performance: runs in O(1) time.
+	 * @author Eldon Schoop Performance: runs in O(1) time.
 	 */
 	public T frontItem() {
 		return head.next.item;
@@ -236,8 +242,8 @@ public class DList<T> implements Iterable<T> {
 	 * attempt to use it will cause an exception. (The sentinel is "invalid".)
 	 * 
 	 * @author Eldon Schoop
-	 * @return a DListNode<T> at the back of this DList<T>.
-	 * Performance: runs in O(1) time.
+	 * @return a DListNode<T> at the back of this DList<T>. Performance: runs in
+	 *         O(1) time.
 	 */
 	public DListNode<T> back() {
 		return head.prev;
@@ -245,19 +251,19 @@ public class DList<T> implements Iterable<T> {
 
 	/**
 	 * backItem() returns the item at the node at the back of "this" DList<T>.
-	 * Does NOT throw an InvalidNodeException, make sure to double check the items!
+	 * Does NOT throw an InvalidNodeException, make sure to double check the
+	 * items!
 	 * 
 	 * @return the item at the back of "this" DList<T>
-	 * @author Eldon Schoop
-	 * Performance: runs in O(1) time.
+	 * @author Eldon Schoop Performance: runs in O(1) time.
 	 */
 	public T backItem() {
 		return head.prev.item;
 	}
 
 	/**
-	 * removeFront() removes the first item (and node) from a DList. If the
-	 * list is empty, do nothing.
+	 * removeFront() removes the first item (and node) from a DList. If the list
+	 * is empty, do nothing.
 	 * 
 	 * @author Eldon Schoop
 	 */
@@ -270,8 +276,8 @@ public class DList<T> implements Iterable<T> {
 	}
 
 	/**
-	 * removeBack() removes the last item (and node) from a DList. If the
-	 * list is empty, do nothing.
+	 * removeBack() removes the last item (and node) from a DList. If the list
+	 * is empty, do nothing.
 	 * 
 	 * @author Eldon Schoop
 	 */
@@ -284,20 +290,26 @@ public class DList<T> implements Iterable<T> {
 	}
 
 	/**
-	 * partition() partitions dIn using the pivot item. On completion of
-	 * this method, dIn is empty, and its items have been moved to dSmall,
-	 * dEquals, and dLarge, according to their relationship to the pivot.
+	 * partition() partitions dIn using the pivot item. On completion of this
+	 * method, dIn is empty, and its items have been moved to dSmall, dEquals,
+	 * and dLarge, according to their relationship to the pivot.
 	 * 
-	 * @param dIn is a DList<T> of Comparable objects.
-	 * @param pivot is a Comparable item used for partitioning.
-	 * @param dSmall is a DList<T>, in which all items less than pivot
-	 * will be enqueued.
-	 * @param dEquals is a DList<T>, in which all items equal to the pivot
-	 * will be enqueued.
-	 * @param dLarge is a DList<T>, in which all items greater than pivot
-	 * will be enqueued.
+	 * @param dIn
+	 *            is a DList<T> of Comparable objects.
+	 * @param pivot
+	 *            is a Comparable item used for partitioning.
+	 * @param dSmall
+	 *            is a DList<T>, in which all items less than pivot will be
+	 *            enqueued.
+	 * @param dEquals
+	 *            is a DList<T>, in which all items equal to the pivot will be
+	 *            enqueued.
+	 * @param dLarge
+	 *            is a DList<T>, in which all items greater than pivot will be
+	 *            enqueued.
 	 **/
-	public void partition(DList<T> dIn, Comparable pivot, DList<T> dSmall, DList<T> dEquals, DList<T> dLarge) {
+	public void partition(DList<T> dIn, Comparable pivot, DList<T> dSmall,
+			DList<T> dEquals, DList<T> dLarge) {
 		while (!dIn.isEmpty()) {
 			if (pivot.compareTo((Comparable) dIn.frontItem()) > 0) {
 				dSmall.insertBack(dIn.frontItem());
@@ -313,29 +325,39 @@ public class DList<T> implements Iterable<T> {
 	}
 
 	/**
-	 * sort() sorts "this" DList from smallest to largest using the quicksort algorithm.
-	 * Runs in O(n^2) worst case, and O(nlogn) average case time.
+	 * sort() sorts "this" DList from smallest to largest using the quicksort
+	 * algorithm. Runs in O(n^2) worst case, and O(nlogn) average case time.
 	 * 
-	 * @param q is a DList<T> of Comparable objects.
+	 * @param q
+	 *            is a DList<T> of Comparable objects.
 	 **/
-	public void sort(DList<T> d) {
+	public void sort() {
 		DList<T> smaller = new DList<T>();
 		DList<T> same = new DList<T>();
 		DList<T> larger = new DList<T>();
-		if (d.length() > 1) {
-			int pIdx = (int) (Math.random() * d.length());
-			T pivot = d.nth(pIdx);
-			partition(d, ((Comparable) pivot), smaller, same, larger);
-			sort(smaller);
-			sort(larger);
+		if (length() > 1) {
+			int pIdx = ((int) Math.random() * length());
+			Object pivot = nth(pIdx);
+			partition(this, ((Comparable) pivot), smaller, same, larger);
+			smaller.sort();
+			larger.sort();
 		}
-		d.appendDList(smaller);
-		d.appendDList(same);
-		d.append(larger);
+		//System.out.println("Concatenating " + d + " with " + smaller + ".");
+		append(smaller);
+		//System.out.println("d is now " + d + ".");
+		
+		//System.out.println("Concatenating " + d + " with " + same + ".");
+		append(same);
+		//System.out.println("d is now " + d + ".");
+		
+		//System.out.println("Concatenating " + d + " with " + larger + ".");
+		append(larger);
+		//System.out.println("d is now " + d + ".");
 	}
 
 	/**
-	 * @param elem the element to check for inclusion in the DList
+	 * @param elem
+	 *            the element to check for inclusion in the DList
 	 * @return true if the element is in the DList
 	 */
 	public boolean contains(T elem) {
@@ -352,7 +374,8 @@ public class DList<T> implements Iterable<T> {
 	 * position > this.length(), null is returned. Otherwise, the item at
 	 * position "position" is returned. The list does not change.
 	 * 
-	 * @param position the desired position, from 1 to length(), in the list.
+	 * @param position
+	 *            the desired position, from 1 to length(), in the list.
 	 * @return the item at the given position in the list.
 	 **/
 
@@ -373,7 +396,8 @@ public class DList<T> implements Iterable<T> {
 	/**
 	 * Finds an element in the list which matches the search query
 	 * 
-	 * @param elem The element to search for
+	 * @param elem
+	 *            The element to search for
 	 * @return the DListNode which contains the element
 	 */
 	public DListNode<T> find(T elem) {
@@ -394,7 +418,8 @@ public class DList<T> implements Iterable<T> {
 	/**
 	 * Removes the first occurence of the given element
 	 * 
-	 * @param elem The element to find and remove
+	 * @param elem
+	 *            The element to find and remove
 	 */
 	public void remove(T elem) {
 		try {
@@ -407,7 +432,8 @@ public class DList<T> implements Iterable<T> {
 	/**
 	 * Utility function to count the non-null elements in an iterable.
 	 * 
-	 * @param myIter the iterable to count items of
+	 * @param myIter
+	 *            the iterable to count items of
 	 * @return the number of non-null Objects in myIter
 	 */
 	public static int countNonNullElems(Iterable myIter) {
@@ -423,8 +449,8 @@ public class DList<T> implements Iterable<T> {
 	/**
 	 * toString() returns a String representation of this DList<T>.
 	 * 
-	 * @return a String representation of this DList<T>.
-	 * Performance: runs in O(n) time, where n is the length of the list.
+	 * @return a String representation of this DList<T>. Performance: runs in
+	 *         O(n) time, where n is the length of the list.
 	 */
 	public String toString() {
 		String result = "[  ";
@@ -437,48 +463,62 @@ public class DList<T> implements Iterable<T> {
 	}
 
 	private static void testInvalidNode(DListNode p) {
-		System.out.println("p.isValidNode() should be false: " + p.isValidNode());
+		System.out.println("p.isValidNode() should be false: "
+				+ p.isValidNode());
 		try {
 			p.item();
-			System.out.println("p.item() should throw an exception, but didn't.");
+			System.out
+					.println("p.item() should throw an exception, but didn't.");
 		} catch (InvalidNodeException lbe) {
 			System.out.println("p.item() should throw an exception, and did.");
 		}
 		try {
 			p.setItem(new Integer(0));
-			System.out.println("p.setItem() should throw an exception, but didn't.");
+			System.out
+					.println("p.setItem() should throw an exception, but didn't.");
 		} catch (InvalidNodeException lbe) {
-			System.out.println("p.setItem() should throw an exception, and did.");
+			System.out
+					.println("p.setItem() should throw an exception, and did.");
 		}
 		try {
 			p.next();
-			System.out.println("p.next() should throw an exception, but didn't.");
+			System.out
+					.println("p.next() should throw an exception, but didn't.");
 		} catch (InvalidNodeException lbe) {
 			System.out.println("p.next() should throw an exception, and did.");
 		}
 		try {
 			p.prev();
-			System.out.println("p.prev() should throw an exception, but didn't.");
+			System.out
+					.println("p.prev() should throw an exception, but didn't.");
 		} catch (InvalidNodeException lbe) {
 			System.out.println("p.prev() should throw an exception, and did.");
 		}
 		try {
 			p.insertBefore(new Integer(1));
-			System.out.println("p.insertBefore() should throw an exception, but " + "didn't.");
+			System.out
+					.println("p.insertBefore() should throw an exception, but "
+							+ "didn't.");
 		} catch (InvalidNodeException lbe) {
-			System.out.println("p.insertBefore() should throw an exception, and did.");
+			System.out
+					.println("p.insertBefore() should throw an exception, and did.");
 		}
 		try {
 			p.insertAfter(new Integer(1));
-			System.out.println("p.insertAfter() should throw an exception, but " + "didn't.");
+			System.out
+					.println("p.insertAfter() should throw an exception, but "
+							+ "didn't.");
 		} catch (InvalidNodeException lbe) {
-			System.out.println("p.insertAfter() should throw an exception, and did.");
+			System.out
+					.println("p.insertAfter() should throw an exception, and did.");
 		}
 		try {
 			p.remove();
-			System.out.println("p.remove() should throw an exception, but didn't.");
+			System.out
+					.println("p.remove() should throw an exception, but didn't.");
 		} catch (InvalidNodeException lbe) {
-			System.out.println("p.remove() should throw an exception, and did.");
+			System.out
+					.println("p.remove() should throw an exception, and did.");
 		}
 	}
 
@@ -510,7 +550,8 @@ public class DList<T> implements Iterable<T> {
 			for (n = l.front(); n.isValidNode(); n = n.next()) {
 				System.out.println("n.item() should be " + i + ": " + n.item());
 				n.setItem(new Integer(((Integer) n.item()).intValue() * 2));
-				System.out.println("n.item() should be " + 2 * i + ": " + n.item());
+				System.out.println("n.item() should be " + 2 * i + ": "
+						+ n.item());
 				i++;
 			}
 			System.out.println("After doubling all elements of l: " + l);
@@ -520,7 +561,8 @@ public class DList<T> implements Iterable<T> {
 			for (n = l.back(); n.isValidNode(); n = n.prev()) {
 				System.out.println("n.item() should be " + i + ": " + n.item());
 				n.setItem(new Integer(((Integer) n.item()).intValue() * 2));
-				System.out.println("n.item() should be " + 2 * i + ": " + n.item());
+				System.out.println("n.item() should be " + 2 * i + ": "
+						+ n.item());
 				i = i - 2;
 			}
 			System.out.println("After doubling all elements of l again: " + l);
@@ -543,7 +585,8 @@ public class DList<T> implements Iterable<T> {
 			System.out.println("l is now: " + l);
 			testInvalidNode(n);
 		} catch (InvalidNodeException lbe) {
-			System.err.println("Caught InvalidNodeException that should not happen.");
+			System.err
+					.println("Caught InvalidNodeException that should not happen.");
 			System.err.println("Aborting the testing code.");
 		}
 	}
@@ -591,7 +634,7 @@ public class DList<T> implements Iterable<T> {
 	public static void testSort() {
 		DList<Integer> d = makeRandom(10);
 		System.out.println(d.toString());
-		d.sort(d);
+		d.sort();
 		System.out.println(d.toString());
 	}
 
@@ -599,5 +642,8 @@ public class DList<T> implements Iterable<T> {
 		// runJRSTests();
 		// runEldonTests();
 		testSort();
+		//DList<Integer> d = makeRandom(3);
+		//DList<Integer> dd = makeRandom(5);
+
 	}
 }
