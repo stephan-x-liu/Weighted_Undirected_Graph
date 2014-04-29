@@ -42,11 +42,17 @@ public class HashTable<T,V> {
     int a = 123456;
     int b = 234567;
     return mod(mod(a*code+b,large_prime),prime);
-
-    
   }
 
-  static int mod(int num, int m){
+  /** 
+   *  Mod function for HashTable that doesn't return negative numbers.
+   *
+   *  @param num is an integer
+   *  @param m is the mod space
+   *  @return an integer in mod m
+   **/
+
+  public static int mod(int num, int m){
     int temp;
     if(m==0){
       temp = num;
@@ -59,14 +65,28 @@ public class HashTable<T,V> {
     return temp;
   }
 
-  static int next_prime(int num){
+  /** 
+   *  Returns the next prime number
+   *
+   *  @param num is an integer
+   *  @return The next prime integer after num
+   **/
+
+  public static int next_prime(int num){
     while(is_prime(num)==false){
       num++;
     }
     return num;
   }
 
-  static boolean is_prime(int num){
+  /** 
+   *  Returns the next prime number
+   *
+   *  @param num is an integer
+   *  @return boolean for if num is prime
+   **/
+
+  public static boolean is_prime(int num){
     for(int i = 2; i*i <= num; i+=2){
       if(num%i==0){
         return false;
@@ -96,14 +116,12 @@ public class HashTable<T,V> {
     return size == 0;
   }
 
-  public DList<DListNode<Entry<T,V>>>[] buckets(){
-    return buckets;
-  }
   /**
    *  Create a new Entry object referencing the input key and associated value,
    *  and insert the entry into the dictionary.  Return a reference to the new
-   *  entry.  Multiple entries with the same key (or even the same key and
-   *  value) can coexist in the dictionary.
+   *  entry.  If the key exists already, the value of the key is updated.
+   *  The entry is also inserted into a DList of all the entries, and it is 
+   *  this node that is stored as the value in the HashTable.
    *
    *  This method should run in O(1) time if the number of collisions is small.
    *
@@ -114,30 +132,54 @@ public class HashTable<T,V> {
   
 
   public Entry<T,V> insert(T key, V value) {
-    // Replace the following line with your solution.
     Entry<T,V> current = new Entry<T,V>();
     current.key = key;
     current.value = value;
     int hash = compFunction(key.hashCode());
-    entries.insertFront(current);
-    DListNode<Entry<T,V>> node = entries.front();
-    if(buckets[hash]==null){
-      buckets[hash] = new DList<DListNode<Entry<T,V>>>();
+
+    if(find(key)==null){
+      entries.insertFront(current);
+      DListNode<Entry<T,V>> node = entries.front();
+      if(buckets[hash]==null){
+        buckets[hash] = new DList<DListNode<Entry<T,V>>>();
+      }
+      buckets[hash].insertFront(node);
+      size++;
+      if(this.loadFactor()>0.9){
+        this.resize();
+      }
     }
-    buckets[hash].insertFront(node);
-    size++;
-    if(this.loadFactor()>0.9){
-      this.resize();
+    else{
+      try{
+        DListNode<DListNode<Entry<T,V>>> curr = buckets[hash].front();
+        while(curr!=null && curr.item().item().key().equals(key)==false){
+          curr = curr.next();
+        }
+        curr.item().item().setValue(value);
+      }
+      catch(InvalidNodeException e){
+        return null;
+      }
     }
     return current;
   }
+
+
+  /** 
+   *  Returns a DList of all the entries in this HashTable in O(1).
+   *  @return DList containing Entry objects
+   **/
 
   public DList<Entry<T,V>> entries(){
     return entries;
   }
 
+  /** 
+   *  Resizes HashTable to double the size of the previous in O(n) where n
+   *  is the number of entries.
+   **/
+
   public void resize(){
-    System.out.println("RESIZING");
     DList<Entry<T,V>> all_items = this.entries();
     prime = next_prime(size*2);
     this.makeEmpty();
@@ -212,7 +254,7 @@ public class HashTable<T,V> {
   }
 
   /**
-   *  Remove all entries from the dictionary.
+   *  Remove all entries from the dictionary by creating a new buckets array and entries DList.
    */
   public void makeEmpty() {
     buckets = new DList[prime];
@@ -235,51 +277,47 @@ public class HashTable<T,V> {
 
   public static void main(String[] args){
     HashTable<String,Integer> test = new HashTable<String,Integer>(7);
-    // System.out.println(test.size());
-    // System.out.println(test.isEmpty());
-    // test.insert("test",0);
-    // test.insert("test1",1);
-    // test.insert("test2",2);
-    // test.insert("test3",3);
-    // test.insert("test4",4);
-    // test.insert("test5",5);
-    // test.insert("test6",6);
-    // test.insert("test7",7);
-    // test.insert("test8",8);
-    // test.insert("test9",9);
-    // test.insert("test10",10);
-    // System.out.println(test);
-    // System.out.println(test.size());
-    // System.out.println(test.entries());
-    // System.out.println(test.find("test"));
-    // System.out.println(test.find("test1"));
-    // System.out.println(test.find("test2"));
-    // System.out.println(test.find("test3"));
-    // System.out.println(test.find("test4"));
-    // System.out.println(test.find("test5"));
-    // System.out.println(test.find("test6"));
-    // System.out.println(test.find("test7"));
-    // System.out.println(test.find("test8"));
-    // System.out.println(test.find("test9"));
-    // System.out.println(test.find("test10"));
-    // System.out.println(test.remove("test"));
-    // System.out.println(test.remove("test1"));
-    // System.out.println(test.remove("test2"));
-    // System.out.println(test.remove("test3"));
-    // System.out.println(test.remove("test4"));
-    // System.out.println(test.remove("test5"));
-    // System.out.println(test.remove("test6"));
-    // System.out.println(test.remove("test7"));
-    // System.out.println(test.remove("test8"));
-    // System.out.println(test.remove("test9"));
-    // System.out.println(test.remove("test10"));
-    // System.out.println(test.entries());
-    // System.out.println(test);
-    for(int i = 0; i < 1000; i++){
-      test.insert(Integer.toString(i),i);
-    }
+    System.out.println(test.size());
+    System.out.println(test.isEmpty());
+    test.insert("test",0);
+    test.insert("test1",1);
+    test.insert("test2",2);
+    test.insert("test3",3);
+    test.insert("test4",4);
+    test.insert("test5",5);
+    test.insert("test6",6);
+    test.insert("test7",7);
+    test.insert("test8",8);
+    test.insert("test9",9);
+    test.insert("test10",10);
+    test.insert("test5",15);
     System.out.println(test);
-    System.out.println(test.entries);
-    System.out.println(test.find("999"));
+    System.out.println(test.size());
+    System.out.println(test.entries());
+    System.out.println(test.find("test"));
+    System.out.println(test.find("test1"));
+    System.out.println(test.find("test2"));
+    System.out.println(test.find("test3"));
+    System.out.println(test.find("test4"));
+    System.out.println(test.find("test5"));
+    System.out.println(test.find("test6"));
+    System.out.println(test.find("test7"));
+    System.out.println(test.find("test8"));
+    System.out.println(test.find("test9"));
+    System.out.println(test.find("test10"));
+    System.out.println(test.remove("test"));
+    System.out.println(test.remove("test1"));
+    System.out.println(test.remove("test2"));
+    System.out.println(test.remove("test3"));
+    System.out.println(test.remove("test4"));
+    System.out.println(test.remove("test5"));
+    System.out.println(test.remove("test6"));
+    System.out.println(test.remove("test7"));
+    System.out.println(test.remove("test8"));
+    System.out.println(test.remove("test9"));
+    System.out.println(test.remove("test10"));
+    System.out.println(test.entries());
+    System.out.println(test);
+
   }
 }
