@@ -17,6 +17,7 @@ public class Kruskal {
    * of the WUGraph g.  The original WUGraph g is NOT changed.
    *
    * @param g The weighted, undirected graph whose MST we want to compute.
+   * @author Sebastian Merz
    * @return A newly constructed WUGraph representing the MST of g.
    */
   public static WUGraph minSpanTree(WUGraph g) {

@@ -1,3 +1,7 @@
+/**
+ * Edge container object used to make tasks such as sorting the linked list easier.
+ *
+ **/
 public class Edge implements Comparable{
 	protected Object vertex1;
 	protected Object vertex2;
