@@ -137,19 +137,14 @@ public class HashTable<T,V> {
   }
 
   public void resize(){
-    try{
-      HashTable<T,V> larger = new HashTable<T,V>(next_prime(size*2));
-      for(DList<DListNode<Entry<T,V>>> k: buckets){
-        for(DListNode<Entry<T,V>> j: k){
-          larger.insert(j.item().key(),j.item().value());
-        }
-      }
-      buckets = larger.buckets();
-      prime = buckets.length;
+    System.out.println("RESIZING");
+    DList<Entry<T,V>> all_items = this.entries();
+    prime = next_prime(size*2);
+    this.makeEmpty();
+    for(Entry<T,V> k: all_items){
+      this.insert(k.key(),k.value());
     }
-    catch(InvalidNodeException m){
-      return;
-    }
+    
   }
 
   /** 
@@ -221,6 +216,7 @@ public class HashTable<T,V> {
    */
   public void makeEmpty() {
     buckets = new DList[prime];
+    entries = new DList<Entry<T,V>>();
     size = 0;
   }
 
@@ -244,7 +240,7 @@ public class HashTable<T,V> {
   }
 
   public static void main(String[] args){
-    HashTable<String,Integer> test = new HashTable<String,Integer>(100);
+    HashTable<String,Integer> test = new HashTable<String,Integer>(7);
     System.out.println(test.size());
     System.out.println(test.isEmpty());
     test.insert("test",0);
