@@ -20,7 +20,13 @@ public class Kruskal {
    * @return A newly constructed WUGraph representing the MST of g.
    */
   public static WUGraph minSpanTree(WUGraph g) {
-	  return new WUGraph();
-  }
+    WUGraph output = new WUGraph();
+    Object[] origVertices = g.getVertices();
+
+    for(Object item:origVertices){
+        output.addVertex(item);
+    }
+
+    DisjointSet linkedSet = new DisjointSets(origVertices.length)
 
 }
