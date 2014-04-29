@@ -222,64 +222,64 @@ public class HashTable<T,V> {
 
   public String toString(){
     String ret = "{  ";
-    try{
-      for(int i = 0; i < buckets.length; i++){
-        if(buckets[i]!=null){
-          for(DListNode<Entry<T,V>> curr : buckets[i]){
-            ret += curr.item().key().toString() + ":" + curr.item().value().toString() + "  ";
-          }
-        }
-      }
-      ret += "  }";
-      return ret;
-    }
-    catch(InvalidNodeException m){
-      return "ERROR";
-    }
 
+    for(Entry<T,V> curr : entries){
+        ret += curr.key().toString() + ":" + curr.value().toString() + "  ";
+      }
+
+    ret += "  }";
+    return ret;
   }
+
+
 
   public static void main(String[] args){
     HashTable<String,Integer> test = new HashTable<String,Integer>(7);
-    System.out.println(test.size());
-    System.out.println(test.isEmpty());
-    test.insert("test",0);
-    test.insert("test1",1);
-    test.insert("test2",2);
-    test.insert("test3",3);
-    test.insert("test4",4);
-    test.insert("test5",5);
-    test.insert("test6",6);
-    test.insert("test7",7);
-    test.insert("test8",8);
-    test.insert("test9",9);
-    test.insert("test10",10);
+    // System.out.println(test.size());
+    // System.out.println(test.isEmpty());
+    // test.insert("test",0);
+    // test.insert("test1",1);
+    // test.insert("test2",2);
+    // test.insert("test3",3);
+    // test.insert("test4",4);
+    // test.insert("test5",5);
+    // test.insert("test6",6);
+    // test.insert("test7",7);
+    // test.insert("test8",8);
+    // test.insert("test9",9);
+    // test.insert("test10",10);
+    // System.out.println(test);
+    // System.out.println(test.size());
+    // System.out.println(test.entries());
+    // System.out.println(test.find("test"));
+    // System.out.println(test.find("test1"));
+    // System.out.println(test.find("test2"));
+    // System.out.println(test.find("test3"));
+    // System.out.println(test.find("test4"));
+    // System.out.println(test.find("test5"));
+    // System.out.println(test.find("test6"));
+    // System.out.println(test.find("test7"));
+    // System.out.println(test.find("test8"));
+    // System.out.println(test.find("test9"));
+    // System.out.println(test.find("test10"));
+    // System.out.println(test.remove("test"));
+    // System.out.println(test.remove("test1"));
+    // System.out.println(test.remove("test2"));
+    // System.out.println(test.remove("test3"));
+    // System.out.println(test.remove("test4"));
+    // System.out.println(test.remove("test5"));
+    // System.out.println(test.remove("test6"));
+    // System.out.println(test.remove("test7"));
+    // System.out.println(test.remove("test8"));
+    // System.out.println(test.remove("test9"));
+    // System.out.println(test.remove("test10"));
+    // System.out.println(test.entries());
+    // System.out.println(test);
+    for(int i = 0; i < 1000; i++){
+      test.insert(Integer.toString(i),i);
+    }
     System.out.println(test);
-    System.out.println(test.size());
-    System.out.println(test.entries());
-    System.out.println(test.find("test"));
-    System.out.println(test.find("test1"));
-    System.out.println(test.find("test2"));
-    System.out.println(test.find("test3"));
-    System.out.println(test.find("test4"));
-    System.out.println(test.find("test5"));
-    System.out.println(test.find("test6"));
-    System.out.println(test.find("test7"));
-    System.out.println(test.find("test8"));
-    System.out.println(test.find("test9"));
-    System.out.println(test.find("test10"));
-    System.out.println(test.remove("test"));
-    System.out.println(test.remove("test1"));
-    System.out.println(test.remove("test2"));
-    System.out.println(test.remove("test3"));
-    System.out.println(test.remove("test4"));
-    System.out.println(test.remove("test5"));
-    System.out.println(test.remove("test6"));
-    System.out.println(test.remove("test7"));
-    System.out.println(test.remove("test8"));
-    System.out.println(test.remove("test9"));
-    System.out.println(test.remove("test10"));
-    System.out.println(test.entries());
-    System.out.println(test);
+    System.out.println(test.entries);
+    System.out.println(test.find("999"));
   }
 }
