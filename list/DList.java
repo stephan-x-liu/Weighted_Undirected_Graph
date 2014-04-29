@@ -152,10 +152,21 @@ public class DList<T> implements Iterable<T> {
 		size++;
 	}
 
+	/**
+	 * append() is simply an alias to insertBack().
+	 * 
+	 * @see DList#insertBack(Object)
+	 */
 	public void append(T item) {
 		insertBack(item);
 	}
 
+	/**
+	 * Appends an iterable, one item at a time, to "this" DList.
+	 * Runs in linear time.
+	 * 
+	 * @param myIter the iterable to append to "this" DList.
+	 */
 	public void append(Iterable<T> myIter) {
 		for (T elem : myIter) {
 			if (elem != null) {
@@ -164,10 +175,34 @@ public class DList<T> implements Iterable<T> {
 		}
 	}
 
+	/**
+	 * Appends an iterable to "this" DList, one item at a time.
+	 * Appends items whether or not they are null. (Does not check).
+	 * Runs in linear time.
+	 * 
+	 * @param myIter the iterable to append to "this" DList.
+	 */
 	public void appendWithNull(Iterable<T> myIter) {
 		for (T elem : myIter) {
 			insertBack(elem);
 		}
+	}
+
+	/**
+	 * Appends a DList<T> to "this" DList<T>. Runs in constant time.
+	 * Type parameters need to be the same.
+	 * 
+	 * @param myList the DList<T> to append to "this" DList.
+	 */
+	public void appendDList(DList<T> myList) {
+		if (myList.length() == 0) {
+			return;
+		}
+		head.prev.next = myList.front();
+		myList.front().prev = head.prev;
+		head.prev = myList.back();
+		myList.back().next = head;
+		myList.size += myList.length();
 	}
 
 	/**
@@ -249,6 +284,57 @@ public class DList<T> implements Iterable<T> {
 	}
 
 	/**
+	 * partition() partitions dIn using the pivot item. On completion of
+	 * this method, dIn is empty, and its items have been moved to dSmall,
+	 * dEquals, and dLarge, according to their relationship to the pivot.
+	 * 
+	 * @param dIn is a DList<T> of Comparable objects.
+	 * @param pivot is a Comparable item used for partitioning.
+	 * @param dSmall is a DList<T>, in which all items less than pivot
+	 * will be enqueued.
+	 * @param dEquals is a DList<T>, in which all items equal to the pivot
+	 * will be enqueued.
+	 * @param dLarge is a DList<T>, in which all items greater than pivot
+	 * will be enqueued.
+	 **/
+	public void partition(DList<T> dIn, Comparable pivot, DList<T> dSmall, DList<T> dEquals, DList<T> dLarge) {
+		while (!dIn.isEmpty()) {
+			if (pivot.compareTo((Comparable) dIn.frontItem()) > 0) {
+				dSmall.insertBack(dIn.frontItem());
+				dIn.removeFront();
+			} else if (pivot.compareTo((Comparable) dIn.frontItem()) < 0) {
+				dLarge.insertBack(dIn.frontItem());
+				dIn.removeFront();
+			} else {
+				dEquals.insertBack(dIn.frontItem());
+				dIn.removeFront();
+			}
+		}
+	}
+
+	/**
+	 * sort() sorts "this" DList from smallest to largest using the quicksort algorithm.
+	 * Runs in O(n^2) worst case, and O(nlogn) average case time.
+	 * 
+	 * @param q is a DList<T> of Comparable objects.
+	 **/
+	public void sort(DList<T> d) {
+		DList<T> smaller = new DList<T>();
+		DList<T> same = new DList<T>();
+		DList<T> larger = new DList<T>();
+		if (d.length() > 1) {
+			int pIdx = (int) (Math.random() * d.length());
+			T pivot = d.nth(pIdx);
+			partition(d, ((Comparable) pivot), smaller, same, larger);
+			sort(smaller);
+			sort(larger);
+		}
+		d.appendDList(smaller);
+		d.appendDList(same);
+		d.append(larger);
+	}
+
+	/**
 	 * @param elem the element to check for inclusion in the DList
 	 * @return true if the element is in the DList
 	 */
@@ -261,10 +347,39 @@ public class DList<T> implements Iterable<T> {
 		return false;
 	}
 
+	/**
+	 * nth() returns the item at the specified position. If position < 1 or
+	 * position > this.length(), null is returned. Otherwise, the item at
+	 * position "position" is returned. The list does not change.
+	 * 
+	 * @param position the desired position, from 1 to length(), in the list.
+	 * @return the item at the given position in the list.
+	 **/
+
+	public T nth(int position) {
+		DListNode<T> currentNode;
+
+		currentNode = head.next;
+		while (position > 0) {
+			currentNode = currentNode.next;
+			if (!currentNode.isValidNode()) {
+				return null;
+			}
+			position--;
+		}
+		return currentNode.item;
+	}
+
+	/**
+	 * Finds an element in the list which matches the search query
+	 * 
+	 * @param elem The element to search for
+	 * @return the DListNode which contains the element
+	 */
 	public DListNode<T> find(T elem) {
 		try {
 			DListNode<T> curr = this.front();
-			while(curr!=null) {
+			while (curr != null) {
 				if (curr.item().equals(elem)) {
 					return curr;
 				}
@@ -276,6 +391,11 @@ public class DList<T> implements Iterable<T> {
 		}
 	}
 
+	/**
+	 * Removes the first occurence of the given element
+	 * 
+	 * @param elem The element to find and remove
+	 */
 	public void remove(T elem) {
 		try {
 			find(elem).remove();
@@ -283,7 +403,7 @@ public class DList<T> implements Iterable<T> {
 			return;
 		}
 	}
-	
+
 	/**
 	 * Utility function to count the non-null elements in an iterable.
 	 * 
@@ -454,15 +574,30 @@ public class DList<T> implements Iterable<T> {
 		System.out.println("Appending {null 12 null 12 null");
 		myDList.append(Arrays.asList(spam));
 		System.out.println("myDList is now: " + myDList);
-		System.out.println("\n My max is " + myDList.max() + "\n");
 		// Test iterator
 		for (Integer i : myDList) {
 			System.out.print("" + i + " ");
 		}
 	}
 
+	public static DList<Integer> makeRandom(int size) {
+		DList<Integer> d = new DList<Integer>();
+		for (int i = 0; i < size; i++) {
+			d.insertBack(new Integer((int) (size * Math.random())));
+		}
+		return d;
+	}
+
+	public static void testSort() {
+		DList<Integer> d = makeRandom(10);
+		System.out.println(d.toString());
+		d.sort(d);
+		System.out.println(d.toString());
+	}
+
 	public static void main(String[] argv) {
 		// runJRSTests();
-		runEldonTests();
+		// runEldonTests();
+		testSort();
 	}
 }
