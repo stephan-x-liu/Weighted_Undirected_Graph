@@ -143,7 +143,9 @@ public class WUGraph {
     }
     HashTable<Object,VertexPair> n = vertices.find(vertex).value();
     DList<Entry<Object,VertexPair>> n_entries = n.entries();
-    Neighbors all = new Neighbors(n.size());
+    Neighbors all = new Neighbors();
+    all.weightList = new int[n.size()];
+    all.neighborList = new Object[n.size()];
     int count = 0;
     for(Entry<Object,VertexPair> k : n_entries){
       all.weightList[count] = edges.find(k.value()).value();

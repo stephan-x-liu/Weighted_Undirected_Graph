@@ -18,8 +18,4 @@ public class Neighbors {
   public Object[] neighborList;
   public int[] weightList;
 
-  public Neighbors(int length){
-  	neighborList = new Object[length];
-  	weightList = new int[length];
-  }
 }
