@@ -19,32 +19,31 @@ public class Kruskal {
    * of the WUGraph g.  The original WUGraph g is NOT changed.
    *
    * @param g The weighted, undirected graph whose MST we want to compute.
-   * @author Sebastian Merz
    * @return A newly constructed WUGraph representing the MST of g.
+   * @author Sebastian Merz
    */
   public static WUGraph minSpanTree(WUGraph g) {
     WUGraph output = new WUGraph();
     Object[] origVertices = g.getVertices();
     DList<Edge> edgeList = new DList();
-    HashTable<Edge,Integer> edgeTable = new HashTable(g.edgeCount());
+    HashTable<Edge,Integer> existingEdgeTable = new HashTable(g.edgeCount());
     HashTable<Object,Integer> vertexTable = new HashTable(origVertices.length);
 
     int j=0; //We keep (:) loop for elegance, but we need a counter for later.
     for(Object item:origVertices){
       vertexTable.insert(item, j);
       j++;
+
       output.addVertex(item);
       Neighbors neighbors = g.getNeighbors(item);
+
       int i;
       for(i=0;i<neighbors.neighborList.length;i++){
-        //This is going to give us every edge twice. The alternative is fancy detection though.
-        //Specifically via a hashtable. If we need one anyway we'll make it here.
-        //Oh fuck it, lets do it.
         Edge e = new Edge(item, neighbors.neighborList[i], neighbors.weightList[i]);
 
-        if(edgeTable.find(e) == null){
+        if(existingEdgeTable.find(e) == null){
           edgeList.insertFront(e);
-          edgeTable.insert(e, 1);
+          existingEdgeTable.insert(e, 1);
         }
       }
     }
